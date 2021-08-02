@@ -4,7 +4,12 @@ spring:
     password: root
     url: jdbc:mysql://127.0.0.1:3306/gulimall_ums?serverTimezone=UTC
     driver-class-name: com.mysql.jdbc.Driver
-
+  application:
+    name: member
+  cloud:
+    nacos:
+      discovery:
+        server-addr: localhost:8848
 
 mybatis-plus:
   #classpath*:/mapper/**/*.xml  当前项目和jar的类路径
@@ -12,3 +17,6 @@ mybatis-plus:
   global-config:
     db-config:
       id-type: auto
+
+server:
+  port: 9000
