@@ -5,7 +5,7 @@ spring:
     url: jdbc:mysql://127.0.0.1:3306/gulimall_pms?serverTimezone=UTC
     driver-class-name: com.mysql.jdbc.Driver
   application:
-    name: product
+    name: gulimail-product
   cloud:
     nacos:
       discovery:
@@ -18,4 +18,4 @@ mybatis-plus:
     db-config:
       id-type: auto
 server:
-  port: 10000
+  port: 10001
