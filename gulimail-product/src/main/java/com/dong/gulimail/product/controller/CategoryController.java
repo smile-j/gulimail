@@ -72,12 +72,19 @@ public class CategoryController {
         return R.ok();
     }
 
+    @RequestMapping("/update/sort")
+    public R updateSort(@RequestBody CategoryEntity[] categorys){
+        categoryService.updateBatchById(Arrays.asList(categorys));
+        return R.ok();
+    }
+
     /**
      * 删除
      */
     @RequestMapping("/delete")
     public R delete(@RequestBody Long[] catIds){
-		categoryService.removeByIds(Arrays.asList(catIds));
+//		categoryService.removeByIds(Arrays.asList(catIds));
+		categoryService.removeMenuByIds(Arrays.asList(catIds));
 
         return R.ok();
     }

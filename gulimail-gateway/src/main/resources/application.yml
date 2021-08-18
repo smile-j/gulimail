@@ -11,7 +11,7 @@ spring:
           predicates:
             - Query=url,qq
         - id: product_route
-          uri: lb://gulimai-product
+          uri: lb://gulimail-product
           predicates:
             - Path=/api/product/**
           filters:
