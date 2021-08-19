@@ -1,7 +1,12 @@
 package com.dong.gulimail.product.service.impl;
 
+import com.dong.gulimail.product.service.CategoryBrandRelationService;
+import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -15,11 +20,14 @@ import com.dong.common.utils.Query;
 import com.dong.gulimail.product.dao.CategoryDao;
 import com.dong.gulimail.product.entity.CategoryEntity;
 import com.dong.gulimail.product.service.CategoryService;
+import org.springframework.transaction.annotation.Transactional;
 
 
 @Service("categoryService")
 public class CategoryServiceImpl extends ServiceImpl<CategoryDao, CategoryEntity> implements CategoryService {
 
+    @Autowired
+    private CategoryBrandRelationService categoryBrandRelationService;
 
 
     @Override
@@ -57,6 +65,38 @@ public class CategoryServiceImpl extends ServiceImpl<CategoryDao, CategoryEntity
          * todo 检查是否被其他引用
          */
         baseMapper.deleteBatchIds(ids);
+    }
+
+    @Override
+    public Long[] findCatelogPath(Long catelogId) {
+        List<Long> paths = new ArrayList<>();
+
+        List<Long> parentPath = findParentPath(catelogId, paths);
+        Collections.reverse(parentPath);
+
+        return (Long[]) parentPath.toArray(new Long[parentPath.size()]);
+    }
+
+    @Override
+    @Transactional
+    public void updateCascade(CategoryEntity category) {
+        this.updateById(category);
+        if(StringUtils.isNotBlank(category.getName())){
+            categoryBrandRelationService.updateCategory(category.getCatId(),category.getName());
+            /**
+             * todo  更新其他关联
+             */
+        }
+    }
+
+    private List<Long> findParentPath(Long catelogId,List<Long> paths){
+        paths.add(catelogId);
+        CategoryEntity byId = this.getById(catelogId);
+        if(byId.getParentCid()!=0){
+            findParentPath(byId.getParentCid(),paths);
+        }
+        return paths;
+
     }
 
     private List<CategoryEntity> getChidrens(CategoryEntity root,List<CategoryEntity>  entities){
