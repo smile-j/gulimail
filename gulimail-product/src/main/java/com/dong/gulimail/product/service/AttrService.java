@@ -3,6 +3,7 @@ package com.dong.gulimail.product.service;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.dong.common.utils.PageUtils;
 import com.dong.gulimail.product.entity.AttrEntity;
+import com.dong.gulimail.product.vo.AttrVo;
 
 import java.util.Map;
 
@@ -16,5 +17,13 @@ import java.util.Map;
 public interface AttrService extends IService<AttrEntity> {
 
     PageUtils queryPage(Map<String, Object> params);
+
+    void  save(AttrVo vo);
+
+    PageUtils baseAttrPage(Map<String, Object> params, Long cateLogId);
+
+    AttrVo getAttrInfo(Long attrId);
+
+    void updateById(AttrVo attrVo);
 }
 
